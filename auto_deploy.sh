@@ -12,7 +12,7 @@ cd /home/charizard/agentt/mcp-server
 MCP_DEPLOY_OUT=$(~/google-cloud-sdk/bin/gcloud run deploy mcp-server \
   --source . \
   --region us-central1 \
-  --set-env-vars="MONGODB_URI=***REMOVED***" \
+  --set-env-vars="MONGODB_URI=<YOUR_MONGODB_URI>" \
   --allow-unauthenticated \
   --project project-849bbb76-ad72-4c26-bb8 --format="value(status.url)")
 
