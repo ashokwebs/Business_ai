@@ -1,6 +1,0 @@
-{
-  "framework": "nextjs",
-  "buildCommand": "cd vector-app && npm run build",
-  "outputDirectory": "vector-app/.next",
-  "installCommand": "cd vector-app && npm install"
-}
