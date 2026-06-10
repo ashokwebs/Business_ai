@@ -12,13 +12,13 @@ export async function GET() {
     });
 
     if (!response.ok) {
-      throw new Error(`Backend returned ${response.status}`);
+      return NextResponse.json({ conversations: [] });
     }
 
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Error proxying conversations from MCP server:", error);
-    return NextResponse.json({ error: "Failed to fetch conversations from backend." }, { status: 500 });
+    // If backend is unreachable, just return empty list so the frontend can load mock data
+    return NextResponse.json({ conversations: [] });
   }
 }

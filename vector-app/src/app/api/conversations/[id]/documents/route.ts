@@ -16,14 +16,13 @@ export async function GET(
     });
 
     if (!response.ok) {
-      throw new Error(`Backend returned ${response.status}`);
+      return NextResponse.json({ documents: [] });
     }
 
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error(`Error proxying documents for conversation ${id} from MCP server:`, error);
-    return NextResponse.json({ error: `Failed to fetch documents for conversation ${id} from backend.` }, { status: 500 });
+    return NextResponse.json({ documents: [] });
   }
 }
 
