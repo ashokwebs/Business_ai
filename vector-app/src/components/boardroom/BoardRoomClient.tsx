@@ -241,107 +241,107 @@ export function BoardRoomClient() {
     setMarketingState("Idle");
     setFinanceState("Idle");
     
-    // Highly engaging simulated telemetry process logs
-    addTelemetry(`[Prism] Received input: Analyzing semantic structure...`);
-    setTimeout(() => addTelemetry(`[System] Allocating compute resources for Executive Council...`), 400);
-    setTimeout(() => {
-      addTelemetry(`[Prism] Delegating to [Atlas] for Business Strategy...`);
-      setCeoState("Analyzing");
-    }, 800);
-    setTimeout(() => {
-      addTelemetry(`[Prism] Delegating to [Nexus] for Technical Architecture...`);
-      setCtoState("Analyzing");
-    }, 1100);
-    setTimeout(() => {
-      addTelemetry(`[Prism] Delegating to [Vanguard] for Marketing Plan...`);
-      setMarketingState("Analyzing");
-    }, 1400);
-    setTimeout(() => {
-      addTelemetry(`[Prism] Delegating to [Ledger] for Financial Modeling...`);
-      setFinanceState("Analyzing");
-    }, 1700);
-    setTimeout(() => addTelemetry(`[System] Establishing secure parallel threads. Awaiting agent responses...`), 2100);
+    addTelemetry(`[Prism] Received input: Analyzing intent...`);
     
-    // Add an empty assistant message to stream into
+    // Add empty assistant message to fill in
     setMessages(prev => [...prev, { role: "assistant", agent: "Prism", content: "" }]);
 
-    // Always bypass backend for demo to avoid Gemini rate limits
-    // Generate universal documents customized to the user's idea
-    const words = userIdea.split(' ').filter(w => w.length > 3);
-    const contextName = words.length > 0 ? words[0].charAt(0).toUpperCase() + words[0].slice(1) : "The Project";
-    
-    setTimeout(() => {
+    try {
+      // Build conversation history for context (last 20 messages)
+      const recentHistory = messages.slice(-20).map(m => ({
+        role: m.role,
+        content: m.content,
+      }));
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userIdea, history: recentHistory }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(err.error || `Server error ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      if (data.mode === "plan") {
+        // Planning mode — animate agent delegation
+        addTelemetry(`[Prism] Planning mode activated. Delegating to Executive Council...`);
+        
+        setTimeout(() => { addTelemetry(`[Prism] Delegating to [Atlas] for Business Strategy...`); setCeoState("Analyzing"); }, 300);
+        setTimeout(() => { addTelemetry(`[Prism] Delegating to [Nexus] for Technical Architecture...`); setCtoState("Analyzing"); }, 600);
+        setTimeout(() => { addTelemetry(`[Prism] Delegating to [Vanguard] for Marketing Plan...`); setMarketingState("Analyzing"); }, 900);
+        setTimeout(() => { addTelemetry(`[Prism] Delegating to [Ledger] for Financial Modeling...`); setFinanceState("Analyzing"); }, 1200);
+
+        // Show Prism's message
+        setMessages(prev => {
+          const newMsg = [...prev];
+          newMsg[newMsg.length - 1].content = data.message;
+          return newMsg;
+        });
+
+        // After a brief delay, show documents and complete agents
+        setTimeout(() => {
+          if (data.documents && data.documents.length > 0) {
+            const newDocs = data.documents.map((doc: any, i: number) => ({
+              _id: `doc-${Date.now()}-${i}`,
+              title: doc.title,
+              content: doc.content,
+              status: "completed",
+              agent: doc.agent,
+              conversation_id: conversationId || "local",
+            }));
+            setDocuments(prev => [...newDocs, ...prev]);
+            setActiveRightTab("documents");
+            
+            data.documents.forEach((doc: any) => {
+              addTelemetry(`[${doc.agent}] Generated: "${doc.title}"`);
+            });
+          }
+
+          if (data.tasks && data.tasks.length > 0) {
+            data.tasks.forEach((task: any) => {
+              addTelemetry(`[${task.agent}] Task assigned (${task.priority}): ${task.task}`);
+            });
+          }
+
+          addTelemetry("[System] All documents compiled. Council tasks assigned.");
+          setCeoState("Complete");
+          setCtoState("Complete");
+          setMarketingState("Complete");
+          setFinanceState("Complete");
+          setIsProcessing(false);
+
+          setTimeout(() => {
+            setCeoState("Idle");
+            setCtoState("Idle");
+            setMarketingState("Idle");
+            setFinanceState("Idle");
+          }, 3000);
+        }, 2000);
+
+      } else {
+        // Chat mode — just show the response
+        addTelemetry(`[Prism] Responding in conversation mode.`);
+        setMessages(prev => {
+          const newMsg = [...prev];
+          newMsg[newMsg.length - 1].content = data.message;
+          return newMsg;
+        });
+        setIsProcessing(false);
+      }
+
+    } catch (err: any) {
+      addTelemetry(`[ERROR] ${err.message}`);
       setMessages(prev => {
         const newMsg = [...prev];
-        newMsg[newMsg.length - 1].content = `I have analyzed your request regarding "${contextName}". This is a significant initiative, but the Executive Council is fully prepared. I've successfully delegated the tasks across the team. They are currently compiling the required project documents, which will appear in the documents tab shortly.`;
+        newMsg[newMsg.length - 1].content = `⚠️ Error: ${err.message}. Make sure GEMINI_API_KEY is set in your environment variables.`;
         return newMsg;
       });
-    }, 2500);
-
-    setTimeout(() => addTelemetry(`[Atlas] Performing market analysis for ${contextName}...`), 3500);
-    setTimeout(() => addTelemetry(`[Nexus] Drafting scalable microservice architecture...`), 4500);
-    setTimeout(() => addTelemetry(`[Vanguard] Compiling GTM strategy and SEO keyword targets...`), 5500);
-    setTimeout(() => addTelemetry(`[Ledger] Running Monte Carlo simulations on CAC/LTV ratios...`), 6500);
-
-    setTimeout(() => {
-      addTelemetry(`[Atlas] Successfully generated '${contextName} Business Strategy'`);
-      addTelemetry(`[Nexus] Successfully generated '${contextName} Technical Architecture'`);
-      addTelemetry(`[Vanguard] Successfully generated '${contextName} Marketing Plan'`);
-      addTelemetry(`[Ledger] Successfully generated '${contextName} Financial Model'`);
-      
-      const mockDocs = [
-        { 
-          _id: `doc-gen-${Date.now()}-1`, 
-          title: `${contextName} Business Strategy`, 
-          content: `# ${contextName} Business Strategy\n\n## 1. Executive Summary\nThis initiative aims to capture significant market share by providing an unparalleled user experience. Our strategic focus is on rapid user acquisition followed by a structured conversion to premium tiers.\n\n## 2. Value Proposition\n- **Efficiency:** Drastically reduces time-to-value for end users.\n- **Scalability:** Designed to handle exponential growth without linear cost increases.\n- **Integration:** Seamlessly fits into existing user workflows.\n\n## 3. Competitive Advantage\nWhile competitors focus on feature bloat, ${contextName} emphasizes core performance and an intuitive interface. Our moat is built on proprietary data handling and exceptional customer success operations.`, 
-          status: "completed", 
-          agent: "Atlas", 
-          conversation_id: conversationId || "mock-id" 
-        },
-        { 
-          _id: `doc-gen-${Date.now()}-2`, 
-          title: `${contextName} Technical Architecture`, 
-          content: `# ${contextName} Technical Architecture\n\n## 1. Infrastructure Overview\n- **Edge Gateway:** Next.js Serverless Edge Runtime for global low-latency access.\n- **Compute Layer:** Auto-scaling containerized microservices managed via Kubernetes (AWS EKS).\n- **Database:** Distributed MongoDB Atlas ReplicaSet for high availability and failover.\n\n## 2. Orchestration & Queueing\n- **Job Management:** Redis Cluster handling asynchronous task queues and WebSockets for real-time client updates.\n- **Orchestrator:** Python FastAPI backend routing complex logic to specialized worker nodes.\n\n## 3. Security & Compliance\n- End-to-end encryption (TLS 1.3 in transit, AES-256 at rest).\n- Automated dependency scanning and continuous integration pipelines (CI/CD).`, 
-          status: "completed", 
-          agent: "Nexus", 
-          conversation_id: conversationId || "mock-id" 
-        },
-        { 
-          _id: `doc-gen-${Date.now()}-3`, 
-          title: `${contextName} Marketing Plan`, 
-          content: `# ${contextName} Marketing Strategy\n\n## 1. Target Audience\nPrimary demographic includes tech-forward early adopters and small-to-medium enterprise (SME) teams looking for efficiency multipliers.\n\n## 2. Go-to-Market (GTM) Motion\n- **Phase 1 (Launch):** Product Hunt, HackerNews, and targeted social media outreach to build a waitlist.\n- **Phase 2 (Growth):** Content marketing (SEO-optimized technical blogs) and influencer partnerships in the tech space.\n- **Phase 3 (Scale):** Paid acquisition (LinkedIn Ads for B2B, Twitter/X for B2C) optimizing for lowest CAC.\n\n## 3. Freemium Hook\nThe free tier provides enough value for daily use but gates power-user features (e.g., API access, team collaboration, advanced analytics) behind the Pro subscription.`, 
-          status: "completed", 
-          agent: "Vanguard", 
-          conversation_id: conversationId || "mock-id" 
-        },
-        { 
-          _id: `doc-gen-${Date.now()}-4`, 
-          title: `${contextName} Financial Model`, 
-          content: `# ${contextName} Financial Projections\n\n## 1. Revenue Streams\n- **Starter Tier:** $0/mo (Lead Generation)\n- **Pro Tier:** $29/mo (Core Revenue Engine)\n- **Enterprise:** $499+/mo (Custom SLA & Support)\n\n## 2. Key Performance Indicators (KPIs)\n- **Target CAC (Customer Acquisition Cost):** < $45\n- **Target LTV (Life Time Value):** > $400\n- **Gross Margin:** Stabilizing at 72% post-optimization.\n\n## 3. 12-Month Runway Forecast\nInitial capital will heavily subsidize compute and engineering costs for the first 6 months. Post-launch, organic growth is projected to reduce burn rate by 15% month-over-month, reaching cash-flow positive by Month 14.`, 
-          status: "completed", 
-          agent: "Ledger", 
-          conversation_id: conversationId || "mock-id" 
-        }
-      ];
-      
-      setDocuments(prev => [...mockDocs, ...prev]);
-      setActiveRightTab("documents");
-      addTelemetry("[System] Documents compiled and saved to database.");
-      
-      setCeoState("Complete");
-      setCtoState("Complete");
-      setMarketingState("Complete");
-      setFinanceState("Complete");
       setIsProcessing(false);
-      
-      setTimeout(() => {
-        setCeoState("Idle");
-        setCtoState("Idle");
-        setMarketingState("Idle");
-        setFinanceState("Idle");
-      }, 3000);
-      
-    }, 8000);
+    }
   };
 
   const getUsedTokens = () => {
