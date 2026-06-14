@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="vector-app/public/vector_logo.png" alt="Vector Logo" width="200" />
+  <img src="assets/logo.png" alt="Vector Logo" width="200" style="border-radius: 20px; box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);" />
 
   <h1>Vector AI</h1>
   <p><strong>The AI Business Command Center</strong></p>
