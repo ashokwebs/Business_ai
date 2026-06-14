@@ -144,10 +144,6 @@ export default function AgentsPage() {
             Configure, deploy, and monitor your executive AI agents in real-time.
           </p>
         </div>
-        <button className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center gap-2 active:scale-[0.98]">
-          <Plus className="w-4 h-4" />
-          Train New Agent
-        </button>
       </motion.div>
 
       {/* Search Bar */}
