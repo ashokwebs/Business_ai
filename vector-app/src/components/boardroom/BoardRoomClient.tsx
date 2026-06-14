@@ -371,7 +371,7 @@ export function BoardRoomClient() {
       <div className="w-80 flex flex-col gap-4 shrink-0">
         
         {/* Council Status */}
-        <div className="bg-surface border border-outline-variant rounded-xl p-4 shadow-sm flex-[2] overflow-y-auto min-h-0">
+        <div className="bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl p-4 shadow-sm flex-[2] overflow-y-auto min-h-0">
           <h3 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4 flex items-center gap-2">
             <Shield className="w-3.5 h-3.5" /> Executive Council
           </h3>
@@ -416,7 +416,7 @@ export function BoardRoomClient() {
         </div>
 
         {/* Saved Chats */}
-        <div className="bg-surface border border-outline-variant rounded-xl p-4 shadow-sm flex-[1] overflow-y-auto min-h-0 flex flex-col">
+        <div className="bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl p-4 shadow-sm flex-[1] overflow-y-auto min-h-0 flex flex-col">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-2">
               <MessageSquare className="w-3.5 h-3.5 text-emerald-500" /> Active Chats
@@ -424,7 +424,7 @@ export function BoardRoomClient() {
             <button
               onClick={handleNewSession}
               disabled={isProcessing}
-              className="text-[10px] font-semibold text-emerald-500 hover:text-emerald-400 disabled:opacity-50 flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded"
+              className="text-[10px] font-semibold text-emerald-500 hover:text-emerald-400 disabled:opacity-50 flex items-center gap-1 bg-emerald-500/8 border border-emerald-500/15 px-2.5 py-1 rounded-lg transition-all"
             >
               <Plus className="w-3 h-3" /> New
             </button>
@@ -471,7 +471,7 @@ export function BoardRoomClient() {
 
       {/* CENTER PANE: Architect Chat / Document Editor */}
       {editingDoc ? (
-        <div className="flex-1 bg-surface border border-outline-variant rounded-xl shadow-sm flex flex-col min-w-0">
+        <div className="flex-1 bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl shadow-sm flex flex-col min-w-0">
           <div className="p-4 border-b border-outline-variant bg-surface-container-low flex justify-between items-center shrink-0">
             <button 
               onClick={() => setEditingDoc(null)} 
@@ -521,11 +521,11 @@ export function BoardRoomClient() {
           </div>
         </div>
       ) : (
-        <div className="flex-1 bg-surface border border-outline-variant rounded-xl shadow-sm flex flex-col min-w-0">
-          <div className="p-4 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+        <div className="flex-1 bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl shadow-sm flex flex-col min-w-0">
+          <div className="p-4 border-b border-outline-variant/30 bg-surface-container/30 flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-md bg-violet-500/20 border border-violet-500/30 flex items-center justify-center">
-                <Brain className="w-4 h-4 text-violet-400" />
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/20">
+                <Brain className="w-4 h-4 text-white" />
               </div>
               <div>
                 <h3 className="text-sm font-bold text-on-surface leading-tight">Prism</h3>
@@ -536,7 +536,7 @@ export function BoardRoomClient() {
           </div>
           
           {/* Chat History */}
-          <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-surface-container-lowest">
+          <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-surface-container-lowest/30">
             <AnimatePresence>
               {messages.map((msg, idx) => (
                 <MessageBubble key={idx} msg={msg} />
@@ -562,7 +562,7 @@ export function BoardRoomClient() {
           </div>
   
           {/* Chat Input */}
-          <div className="p-4 bg-surface-container-low border-t border-outline-variant">
+          <div className="p-4 bg-surface-container/30 border-t border-outline-variant/30">
             <form onSubmit={handleSubmit} className="relative">
               <textarea 
                 value={input}
@@ -570,13 +570,13 @@ export function BoardRoomClient() {
                 onKeyDown={(e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSubmit(e); } }}
                 disabled={isProcessing}
                 placeholder="Ask Prism anything or give a project idea..."
-                className="w-full bg-surface-container-highest border border-outline-variant rounded-lg py-3 pl-4 pr-12 text-sm text-on-surface focus:outline-none focus:border-outline transition-colors resize-none disabled:opacity-50 min-h-[50px] max-h-[150px]"
+                className="w-full bg-surface-container-high/30 border border-outline-variant/40 rounded-xl py-3 pl-4 pr-12 text-sm text-on-surface focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 transition-all resize-none disabled:opacity-50 min-h-[50px] max-h-[150px] placeholder:text-on-surface-variant/30"
                 rows={1}
               />
               <button 
                 type="submit"
                 disabled={isProcessing || !input.trim()}
-                className="absolute right-2 top-2 w-8 h-8 bg-on-surface text-surface-container-lowest rounded-md flex items-center justify-center hover:bg-on-surface/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="absolute right-2 top-2 w-9 h-9 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-lg flex items-center justify-center hover:shadow-lg hover:shadow-emerald-500/25 disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none transition-all active:scale-95"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -591,19 +591,19 @@ export function BoardRoomClient() {
       {/* RIGHT PANE: Live Telemetry & Documents */}
       <div className="w-80 flex flex-col shrink-0 gap-4">
         
-        <div className="bg-surface-container-highest border border-outline-variant rounded-xl shadow-sm flex flex-col h-full overflow-hidden min-h-[300px]">
+        <div className="bg-surface/80 backdrop-blur-xl border border-outline-variant/40 rounded-xl shadow-sm flex flex-col h-full overflow-hidden min-h-[300px]">
           {/* Tab headers */}
-          <div className="h-10 border-b border-outline-variant/50 flex items-center px-2 bg-surface-container shrink-0 justify-between">
+          <div className="h-10 border-b border-outline-variant/30 flex items-center px-2 bg-surface-container/30 shrink-0 justify-between">
             <div className="flex gap-1">
               <button
                 onClick={() => setActiveRightTab('telemetry')}
-                className={`flex items-center px-3 py-1 text-xs font-medium rounded-md transition-colors ${activeRightTab === 'telemetry' ? 'bg-surface-container-highest text-on-surface border border-outline-variant' : 'text-on-surface-variant hover:text-on-surface'}`}
+                className={`flex items-center px-3 py-1 text-xs font-medium rounded-lg transition-all ${activeRightTab === 'telemetry' ? 'bg-surface-container-high/50 text-on-surface border border-outline-variant/50' : 'text-on-surface-variant/60 hover:text-on-surface'}`}
               >
                 <Terminal className="w-3.5 h-3.5 mr-1.5" /> telemetry
               </button>
               <button
                 onClick={() => setActiveRightTab('documents')}
-                className={`flex items-center px-3 py-1 text-xs font-medium rounded-md transition-colors ${activeRightTab === 'documents' ? 'bg-surface-container-highest text-on-surface border border-outline-variant' : 'text-on-surface-variant hover:text-on-surface'}`}
+                className={`flex items-center px-3 py-1 text-xs font-medium rounded-lg transition-all ${activeRightTab === 'documents' ? 'bg-surface-container-high/50 text-on-surface border border-outline-variant/50' : 'text-on-surface-variant/60 hover:text-on-surface'}`}
               >
                 <FileText className="w-3.5 h-3.5 mr-1.5" /> documents ({documents.length})
               </button>
@@ -722,7 +722,7 @@ const AgentStatusCard = memo(function AgentStatusCard({ name, role, state, icon,
     <motion.div 
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className={`relative p-3 rounded-lg border transition-all duration-500 overflow-hidden ${state !== 'Idle' ? 'border-outline shadow-sm bg-surface-container-high' : 'border-outline-variant bg-surface-container'}`}
+      className={`relative p-3 rounded-xl border transition-all duration-500 overflow-hidden ${state !== 'Idle' ? 'border-outline/50 shadow-sm bg-surface-container-high/60' : 'border-outline-variant/40 bg-surface-container/50'}`}
     >
       {/* Background glow when active */}
       {state === 'Analyzing' && (
@@ -738,12 +738,11 @@ const AgentStatusCard = memo(function AgentStatusCard({ name, role, state, icon,
         />
       )}
       <div className="flex items-center gap-3 mb-2 relative z-10">
-        <div className={`w-8 h-8 rounded border overflow-hidden flex items-center justify-center ${state !== 'Idle' ? 'border-outline' : 'border-outline-variant'}`}>
-           <img 
-             src={`https://ui-avatars.com/api/?name=${name}&background=${color}&color=fff&bold=true&font-size=0.4&size=64`} 
-             alt={name} 
-             className="w-full h-full object-cover" 
-           />
+        <div 
+          className="w-9 h-9 rounded-lg overflow-hidden flex items-center justify-center text-white shadow-sm"
+          style={{ background: `linear-gradient(135deg, #${color}, #${color}cc)` }}
+        >
+           {icon}
         </div>
         <div className="flex-1">
           <div className="flex items-center justify-between">

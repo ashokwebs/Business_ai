@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { History, Target, AlertCircle, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -37,17 +38,23 @@ export default function ActivityPage() {
 
   return (
     <div className="px-6 md:px-12 pb-8 max-w-[1600px] mx-auto pt-8">
-      <div className="mb-8 flex justify-between items-end">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8 flex justify-between items-end"
+      >
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-on-surface mb-1 flex items-center gap-3">
-            <History className="w-8 h-8 text-emerald-500" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+              <History className="w-5 h-5" />
+            </div>
             Activity Log
           </h2>
-          <p className="text-sm text-on-surface-variant max-w-2xl">
+          <p className="text-sm text-on-surface-variant/70 max-w-2xl">
             Review past agent orchestrations, architecture plans, and executive strategies saved in MongoDB.
           </p>
         </div>
-      </div>
+      </motion.div>
 
       {loading ? (
         <div className="flex items-center justify-center p-20">

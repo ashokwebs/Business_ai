@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Search, Loader2, FolderOpen, MessageSquare, Clock, ExternalLink, FileText, Activity, Target, CheckCircle2 } from "lucide-react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 type Conversation = {
@@ -81,6 +82,74 @@ const activeInitiatives = [
   }
 ];
 
+const seedProjects: Conversation[] = [
+  {
+    conversation_id: "seed-quantum-ai-saas",
+    title: "Quantum AI — SaaS Analytics Platform",
+    created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+    messages: [
+      { role: "user", content: "Build a SaaS analytics platform powered by AI that provides real-time business intelligence dashboards for startups." },
+      { role: "assistant", content: "I'll coordinate the executive council to develop a comprehensive strategy for Quantum AI. Atlas will handle business strategy, Nexus will architect the tech stack, Vanguard will design the GTM plan, and Ledger will model the financials..." },
+      { role: "assistant", content: "## Executive Summary\n\nQuantum AI is a next-generation SaaS analytics platform that leverages machine learning to deliver real-time business intelligence. Target market: Series A–B startups needing actionable insights without a dedicated data team." },
+    ],
+    documents_count: 4,
+  },
+  {
+    conversation_id: "seed-nexus-fintech",
+    title: "Nexus Pay — Fintech Super App",
+    created_at: new Date(Date.now() - 5 * 86400000).toISOString(),
+    messages: [
+      { role: "user", content: "Design a fintech super app combining payments, investments, and budgeting with AI-driven financial advice." },
+      { role: "assistant", content: "Excellent concept. The council is analyzing the fintech landscape. Ledger is modeling revenue streams while Nexus evaluates the regulatory tech stack requirements..." },
+    ],
+    documents_count: 3,
+  },
+  {
+    conversation_id: "seed-vanguard-edtech",
+    title: "Vanguard Learn — AI Tutoring Platform",
+    created_at: new Date(Date.now() - 8 * 86400000).toISOString(),
+    messages: [
+      { role: "user", content: "Create an AI-powered adaptive tutoring platform for K-12 students with personalized learning paths." },
+      { role: "assistant", content: "Atlas is drafting the business model. The EdTech market is projected at $400B by 2027. We'll target US public school districts first..." },
+      { role: "assistant", content: "Nexus recommends a microservices architecture with a real-time assessment engine powered by Gemini for dynamic question generation." },
+      { role: "user", content: "What about the competitive landscape?" },
+      { role: "assistant", content: "Vanguard has completed the competitive analysis. Key competitors: Khan Academy, Duolingo, Century Tech. Our differentiator: real-time adaptive difficulty powered by multi-modal AI assessment." },
+    ],
+    documents_count: 6,
+  },
+  {
+    conversation_id: "seed-atlas-healthtech",
+    title: "Atlas Health — Remote Patient Monitoring",
+    created_at: new Date(Date.now() - 12 * 86400000).toISOString(),
+    messages: [
+      { role: "user", content: "Build a remote patient monitoring platform integrating IoT wearables with AI diagnostics for chronic disease management." },
+      { role: "assistant", content: "This is a high-impact healthcare initiative. Atlas is evaluating the regulatory landscape (HIPAA, FDA clearance). Nexus is designing the IoT data pipeline architecture..." },
+    ],
+    documents_count: 5,
+  },
+  {
+    conversation_id: "seed-prism-devtools",
+    title: "Prism DevKit — AI Developer Tools",
+    created_at: new Date(Date.now() - 18 * 86400000).toISOString(),
+    messages: [
+      { role: "user", content: "Create an AI-powered developer toolkit that automates code review, generates documentation, and provides intelligent debugging assistance." },
+      { role: "assistant", content: "The council is excited about this one. Nexus is architecting the AST analysis engine. Atlas sees a $15B TAM in developer productivity tools..." },
+      { role: "assistant", content: "## Technical Architecture\n\nCore engine: Language-agnostic AST parser → Gemini 2.5 reasoning layer → IDE plugin interface. Supporting: GitHub/GitLab CI integration, real-time collaboration, and team analytics." },
+    ],
+    documents_count: 7,
+  },
+  {
+    conversation_id: "seed-ledger-proptech",
+    title: "Ledger Estates — AI Property Valuation",
+    created_at: new Date(Date.now() - 25 * 86400000).toISOString(),
+    messages: [
+      { role: "user", content: "Design a proptech platform that uses AI for real-time property valuation, market prediction, and investment portfolio optimization." },
+      { role: "assistant", content: "Ledger is modeling the financial projections. The proptech market offers strong unit economics with a SaaS + transaction fee hybrid model..." },
+    ],
+    documents_count: 2,
+  },
+];
+
 export default function ProjectsPage() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -94,7 +163,7 @@ export default function ProjectsPage() {
         const data = await res.json();
         setConversations(data.conversations || []);
       } catch {
-        // Silently handle — will show empty state
+        // Silently handle — seed projects will show
       } finally {
         setLoading(false);
       }
@@ -102,7 +171,12 @@ export default function ProjectsPage() {
     fetchConversations();
   }, []);
 
-  const filtered = conversations.filter(
+  // Merge real conversations with seed projects, real ones first
+  const allProjects = [...conversations, ...seedProjects.filter(
+    (seed) => !conversations.some((c) => c.conversation_id === seed.conversation_id)
+  )];
+
+  const filtered = allProjects.filter(
     (c) =>
       (c.title || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.conversation_id.toLowerCase().includes(searchQuery.toLowerCase())
@@ -126,31 +200,35 @@ export default function ProjectsPage() {
 
   return (
     <div className="px-4 md:px-8 lg:px-12 pb-8 max-w-[1600px] mx-auto flex flex-col pt-6 md:pt-8">
-      <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 shrink-0">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 shrink-0"
+      >
         <div>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface mb-1">Projects</h2>
-          <p className="text-sm text-on-surface-variant max-w-2xl">
+          <p className="text-sm text-on-surface-variant/70 max-w-2xl">
             Manage your startup portfolios, active workspaces, and strategic initiatives.
           </p>
         </div>
         <Link
           href="/boardroom"
-          className="bg-on-surface text-surface-container-lowest px-4 py-2 rounded-md text-sm font-semibold hover:bg-on-surface/90 transition-colors flex items-center gap-2 shadow-sm shrink-0"
+          className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center gap-2 active:scale-[0.98]"
         >
           <Plus className="w-4 h-4" />
           New Project
         </Link>
-      </div>
+      </motion.div>
 
       {/* Search */}
       <div className="mb-10">
-        <div className="relative focus-within:ring-1 focus-within:ring-outline rounded-md transition-shadow max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant w-4 h-4" />
+        <div className="relative group max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/40 w-4 h-4 transition-colors group-focus-within:text-emerald-500" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="bg-surface-container border border-outline-variant rounded-md py-2 pl-10 pr-4 text-sm text-on-surface focus:outline-none w-full transition-colors placeholder:text-on-surface-variant/50"
+            className="bg-surface-container/50 border border-outline-variant/50 rounded-xl py-2.5 pl-10 pr-4 text-sm text-on-surface focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 w-full transition-all placeholder:text-on-surface-variant/40"
             placeholder="Search projects or agents..."
           />
         </div>
@@ -167,9 +245,12 @@ export default function ProjectsPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {activeInitiatives.map((project) => (
-              <div 
-                key={project.id} 
-                className="group flex flex-col p-5 rounded-xl border border-outline-variant/50 bg-surface-container-lowest hover:border-outline hover:shadow-md transition-all duration-300 cursor-default"
+              <motion.div 
+                key={project.id}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: project.id * 0.06 }}
+                className="premium-card group flex flex-col p-5 rounded-xl cursor-default"
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center gap-3">
@@ -216,7 +297,7 @@ export default function ProjectsPage() {
                     />
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -254,56 +335,72 @@ export default function ProjectsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filtered.map((conv) => {
+          {filtered.map((conv, idx) => {
             const msgCount = conv.messages?.length || 0;
             const lastMsg = conv.messages?.[conv.messages.length - 1];
             const preview = lastMsg?.content?.slice(0, 120) || "No messages yet";
+            const isSeed = conv.conversation_id.startsWith("seed-");
+            const gradients = [
+              "from-emerald-400 to-teal-600",
+              "from-blue-400 to-indigo-600",
+              "from-violet-400 to-purple-600",
+              "from-amber-400 to-orange-600",
+              "from-rose-400 to-pink-600",
+              "from-cyan-400 to-blue-600",
+            ];
+            const gradient = gradients[idx % gradients.length];
 
             return (
-              <Link
+              <motion.div
                 key={conv.conversation_id}
-                href="/boardroom"
-                onClick={() => {
-                  localStorage.setItem('active_conversation_id', conv.conversation_id);
-                }}
-                className="bg-surface border border-outline-variant rounded-xl p-5 hover:border-outline transition-all group flex flex-col gap-3 shadow-sm"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: idx * 0.05 }}
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center shrink-0">
-                      <span className="font-mono text-sm font-bold text-on-surface">
+                <Link
+                  href="/boardroom"
+                  onClick={() => {
+                    if (!isSeed) localStorage.setItem('active_conversation_id', conv.conversation_id);
+                  }}
+                  className="premium-card rounded-xl p-5 flex flex-col gap-3 group block"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shadow-lg shrink-0`}>
                         {(conv.title || "P").charAt(0).toUpperCase()}
-                      </span>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-on-surface group-hover:text-emerald-500 transition-colors line-clamp-1">
+                          {conv.title || "Untitled Project"}
+                        </h3>
+                        <p className="text-[10px] text-on-surface-variant/50 font-mono mt-0.5">
+                          {isSeed ? "Demo Project" : conv.conversation_id.slice(0, 16) + "..."}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-on-surface group-hover:text-emerald-500 transition-colors line-clamp-1">
-                        {conv.title || "Untitled Project"}
-                      </h3>
-                      <p className="text-[10px] text-on-surface-variant font-mono mt-0.5">{conv.conversation_id.slice(0, 16)}...</p>
+                    <ExternalLink className="w-4 h-4 text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity shrink-0 mt-1" />
+                  </div>
+
+                  <p className="text-xs text-on-surface-variant/70 line-clamp-2 leading-relaxed">
+                    {preview}...
+                  </p>
+
+                  <div className="flex items-center gap-4 mt-auto pt-2 border-t border-outline-variant/30">
+                    <div className="flex items-center gap-1 text-[10px] text-on-surface-variant/60">
+                      <MessageSquare className="w-3 h-3" />
+                      <span>{msgCount} messages</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-[10px] text-on-surface-variant/60">
+                      <FileText className="w-3 h-3 text-emerald-500/60" />
+                      <span>{conv.documents_count || 0} documents</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-[10px] text-on-surface-variant/60">
+                      <Clock className="w-3 h-3" />
+                      <span>{getTimeAgo(conv.created_at)}</span>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity shrink-0 mt-1" />
-                </div>
-
-                <p className="text-xs text-on-surface-variant line-clamp-2 leading-relaxed">
-                  {preview}...
-                </p>
-
-                <div className="flex items-center gap-4 mt-auto pt-2 border-t border-outline-variant/50">
-                  <div className="flex items-center gap-1 text-[10px] text-on-surface-variant">
-                    <MessageSquare className="w-3 h-3" />
-                    <span>{msgCount} messages</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-[10px] text-on-surface-variant">
-                    <FileText className="w-3 h-3 text-emerald-500" />
-                    <span>{conv.documents_count || 0} documents</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-[10px] text-on-surface-variant">
-                    <Clock className="w-3 h-3" />
-                    <span>{getTimeAgo(conv.created_at)}</span>
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              </motion.div>
             );
           })}
         </div>

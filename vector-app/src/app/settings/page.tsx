@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Settings2, Cpu, Shield, Key, Bell, Save, Check } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function SettingsPage() {
   const [model, setModel] = useState("gemini-2.5-flash");
@@ -39,15 +40,21 @@ export default function SettingsPage() {
 
   return (
     <div className="px-4 md:px-8 lg:px-12 pb-8 max-w-[1200px] mx-auto pt-6 md:pt-8">
-      <div className="mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8"
+      >
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface mb-1 flex items-center gap-3">
-          <Settings2 className="w-7 h-7 text-on-surface-variant" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-zinc-500 to-zinc-700 flex items-center justify-center text-white shadow-lg">
+            <Settings2 className="w-5 h-5" />
+          </div>
           System Settings
         </h2>
-        <p className="text-sm text-on-surface-variant max-w-2xl">
+        <p className="text-sm text-on-surface-variant/70 max-w-2xl">
           Configure Vector Command Center preferences, agent models, and API keys.
         </p>
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
         {/* Settings Navigation */}

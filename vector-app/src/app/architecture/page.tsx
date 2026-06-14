@@ -1,31 +1,41 @@
 "use client";
 
 import { Download, RefreshCcw, Search, Network, Cloud, Database, Cpu, Lock, Maximize2, Server, Layers, Video, ShieldAlert, Workflow, Zap } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function ArchitecturePage() {
   return (
     <div className="px-6 md:px-12 pb-8 max-w-[1600px] mx-auto h-[calc(100vh-4rem)] flex flex-col pt-8">
-      <div className="mb-6 flex justify-between items-end shrink-0">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-6 flex justify-between items-end shrink-0"
+      >
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-on-surface mb-1">System Architecture</h2>
-          <p className="text-sm text-on-surface-variant max-w-2xl">
+          <p className="text-sm text-on-surface-variant/70 max-w-2xl">
             Live technical blueprints, microservice topologies, and AI model orchestration for the Gengen Video Pipeline.
           </p>
         </div>
         <div className="flex gap-2">
-          <button className="bg-surface-container border border-outline-variant text-on-surface px-4 py-2 rounded-md text-sm font-semibold hover:bg-surface-container-high transition-colors flex items-center gap-2">
+          <button className="bg-surface-container/50 border border-outline-variant/50 text-on-surface px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-surface-container hover:border-outline-variant transition-all flex items-center gap-2">
             <RefreshCcw className="w-4 h-4" />
             Regenerate
           </button>
-          <button className="bg-on-surface text-surface-container-lowest px-4 py-2 rounded-md text-sm font-semibold hover:bg-on-surface/90 transition-colors flex items-center gap-2">
+          <button className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-emerald-500/25 transition-all flex items-center gap-2 active:scale-[0.98]">
             <Download className="w-4 h-4" />
             Export Config
           </button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Interactive Canvas */}
-      <div className="flex-1 bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col overflow-hidden relative shadow-sm">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="flex-1 bg-surface-container-lowest/50 border border-outline-variant/40 rounded-xl flex flex-col overflow-hidden relative shadow-sm"
+      >
         
         {/* Canvas Toolbar */}
         <div className="h-12 border-b border-outline-variant bg-surface-container/50 backdrop-blur-md flex items-center justify-between px-4 z-10 absolute top-0 w-full">
@@ -83,14 +93,7 @@ export default function ArchitecturePage() {
               <path d="M 1220,300 C 1260,300 1260,420 1300,420" stroke="var(--outline-color)" strokeWidth="2" markerEnd="url(#arrowhead)" fill="none" className="opacity-50" />
             </svg>
 
-            {/* CSS Animation for data flow */}
-            <style jsx>{`
-              @keyframes dash {
-                to {
-                  stroke-dashoffset: -8;
-                }
-              }
-            `}</style>
+            {/* dash animation keyframe is defined in globals.css */}
 
             {/* Node 1: Cloudflare WAF */}
             <div className="absolute left-[20px] top-[260px] w-40 bg-surface border border-outline-variant rounded-lg p-3 shadow-md pointer-events-auto hover:border-outline transition-colors cursor-pointer group">
@@ -215,7 +218,7 @@ export default function ArchitecturePage() {
 
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
