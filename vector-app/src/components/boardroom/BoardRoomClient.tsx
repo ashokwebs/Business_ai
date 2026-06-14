@@ -278,7 +278,7 @@ export function BoardRoomClient() {
         // Show Prism's message
         setMessages(prev => {
           const newMsg = [...prev];
-          newMsg[newMsg.length - 1].content = data.message;
+          newMsg[newMsg.length - 1] = { ...newMsg[newMsg.length - 1], content: data.message };
           return newMsg;
         });
 
@@ -327,7 +327,7 @@ export function BoardRoomClient() {
         addTelemetry(`[Prism] Responding in conversation mode.`);
         setMessages(prev => {
           const newMsg = [...prev];
-          newMsg[newMsg.length - 1].content = data.message;
+          newMsg[newMsg.length - 1] = { ...newMsg[newMsg.length - 1], content: data.message };
           return newMsg;
         });
         setIsProcessing(false);
@@ -337,7 +337,7 @@ export function BoardRoomClient() {
       addTelemetry(`[ERROR] ${err.message}`);
       setMessages(prev => {
         const newMsg = [...prev];
-        newMsg[newMsg.length - 1].content = `⚠️ Error: ${err.message}. Make sure GEMINI_API_KEY is set in your environment variables.`;
+        newMsg[newMsg.length - 1] = { ...newMsg[newMsg.length - 1], content: `⚠️ Error: ${err.message}. Make sure GEMINI_API_KEY is set in your environment variables.` };
         return newMsg;
       });
       setIsProcessing(false);
