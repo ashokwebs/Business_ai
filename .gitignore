@@ -140,3 +140,5 @@ mcp-server/terraform/terraform_*.zip
 mcp-server/terraform/.terraform/
 mcp-server/.venv/
 agent-starter-pack/.venv/
+bfg.jar
+.git.bfg-report/
