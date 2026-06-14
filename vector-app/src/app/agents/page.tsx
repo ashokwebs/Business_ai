@@ -10,7 +10,7 @@ const agents = [
     role: "Architect Agent",
     description: "Master orchestrator and systems intelligence layer. Understands natural language, delegates tasks to sub-agents, and synthesizes unified strategies.",
     status: "Online" as const,
-    health: 99.9,
+    health: 94.2,
     model: "Gemini 2.5 Flash",
     tools: [
       { name: "Google Search", icon: Search, color: "text-indigo-500" },
@@ -33,7 +33,7 @@ const agents = [
     role: "CEO Agent",
     description: "Strategic business leadership. Generates business plans, startup strategies, product roadmaps, competitive analysis, and vision documents.",
     status: "Online" as const,
-    health: 99.9,
+    health: 91.7,
     model: "Gemini 2.5 Flash",
     tools: [
       { name: "Web Search", icon: Search, color: "text-indigo-500" },
@@ -56,7 +56,7 @@ const agents = [
     role: "CTO Agent",
     description: "Technical intelligence and engineering leadership. Generates architecture docs, tech stack recommendations, system designs, and API specs.",
     status: "Online" as const,
-    health: 100,
+    health: 97.3,
     model: "Gemini 2.5 Flash",
     tools: [
       { name: "Infrastructure", icon: Cpu, color: "text-sky-500" },
@@ -79,7 +79,7 @@ const agents = [
     role: "Marketing Agent",
     description: "Growth intelligence and branding strategy. Generates marketing plans, launch strategies, audience analysis, content calendars, and brand positioning.",
     status: "Online" as const,
-    health: 100,
+    health: 88.5,
     model: "Gemini 2.5 Flash",
     tools: [
       { name: "Audience Research", icon: TrendingUp, color: "text-amber-500" },
@@ -102,7 +102,7 @@ const agents = [
     role: "Finance Agent",
     description: "Financial intelligence and monetization strategy. Generates pricing models, revenue projections, cost analyses, and sustainability plans.",
     status: "Online" as const,
-    health: 100,
+    health: 92.1,
     model: "Gemini 2.5 Flash",
     tools: [
       { name: "Revenue Models", icon: DollarSign, color: "text-emerald-500" },
